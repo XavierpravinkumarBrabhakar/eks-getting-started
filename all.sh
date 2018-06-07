@@ -57,10 +57,13 @@ installAwsEksCli() {
 }
 
 createKubeConfig() {
+  echo "---> installing latest version of kubectl in local dir ..."
   curl -LO https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/bin/darwin/amd64/kubectl
   chmod +x kubectl
   export PATH=$PWD:$PATH
 
+
+  echo "---> creatin kubeconfig file: ~/.kube/config-eks"
   cat >  ~/.kube/config-eks <<EOF
 apiVersion: v1
 clusters:
@@ -88,7 +91,9 @@ users:
         - "${EKS_CLUSTER_NAME}"
 EOF
 
- export KUBECONFIG=$KUBECONFIG:~/.kube/config-eks
+  set -x
+  export KUBECONFIG=$KUBECONFIG:~/.kube/config-eks
+  set +x
 }
 
 createWorkers() {
@@ -205,4 +210,6 @@ eksCreateCluster() {
   EKS_INSTANCE_ROLE=$(getStackOutput  $WORKER_STACK_NAME NodeInstanceRole)
 
   authWorkers
+  createKubeConfig
+
 }
