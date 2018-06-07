@@ -161,13 +161,13 @@ deleteStackWait() {
     aws cloudformation wait stack-delete-complete --stack-name $stack
 }
 
-cleanup() {
+eksCleanup() {
     deleteStackWait $WORKER_STACK_NAME
     aws eks delete-cluster --name $EKS_CLUSTER_NAME
     deleteStackWait $VPC_STACK_NAME
 }
 
-main() {
+eksCreateCluster() {
 
   export AWS_DEFAULT_REGION=us-east-1
   export EKS_WORKER_AMI=ami-dea4d5a1
