@@ -91,9 +91,7 @@ users:
         - "${EKS_CLUSTER_NAME}"
 EOF
 
-  set -x
   export KUBECONFIG=$KUBECONFIG:~/.kube/config-eks
-  set +x
 }
 
 createWorkers() {
@@ -209,7 +207,7 @@ eksCreateCluster() {
   
   EKS_INSTANCE_ROLE=$(getStackOutput  $WORKER_STACK_NAME NodeInstanceRole)
 
-  authWorkers
   createKubeConfig
+  authWorkers
 
 }
