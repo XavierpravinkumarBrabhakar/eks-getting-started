@@ -28,7 +28,15 @@ createCluster() {
        --resources-vpc-config subnetIds=$EKS_SUBNET_IDS,securityGroupIds=$EKS_SECURITY_GROUPS
 
    #wait for "ACTIVE"
-   aws eks describe-cluster --name $EKS_CLUSTER_NAME  --query cluster.status --out text
+   
+
+    echo "---> wait for create cluster: $EKS_CLUSTER_NAME ..."
+    while ! aws eks describe-cluster --name $EKS_CLUSTER_NAME  --query cluster.status --out text | grep -q ACTIVE; do 
+	sleep ${SLEEP:=3}
+	echo -n .
+    done
+
+
 
 }
 createVPC() {
