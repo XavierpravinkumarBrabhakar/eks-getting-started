@@ -96,7 +96,7 @@ createWorkers() {
 	    ParameterKey=NodeAutoScalingGroupMaxSize,ParameterValue=${EKS_NODE_MAX} \
 	    ParameterKey=ClusterControlPlaneSecurityGroup,ParameterValue=${EKS_SECURITY_GROUPS} \
 	    ParameterKey=ClusterName,ParameterValue=${EKS_CLUSTER_NAME} \
-	    ParameterKey=Subnets,ParameterValue="${EKS_SUBNET_IDS//,/ }" \
+	    ParameterKey=Subnets,ParameterValue=${EKS_SUBNET_IDS//,/\\,} \
 	    ParameterKey=VpcId,ParameterValue=${EKS_VPC_ID} \
 	    ParameterKey=KeyName,ParameterValue=${WORKER_STACK_NAME}
 }
