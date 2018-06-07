@@ -99,6 +99,26 @@ createWorkers() {
 	    ParameterKey=Subnets,ParameterValue=${EKS_SUBNET_IDS//,/\\,} \
 	    ParameterKey=VpcId,ParameterValue=${EKS_VPC_ID} \
 	    ParameterKey=KeyName,ParameterValue=${WORKER_STACK_NAME}
+
+}
+
+authWorkers() {
+    cat > aws-auth-cm.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+  mapRoles: |
+    - rolearn: ${EKS_INSTANCE_ROLE}
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+EOF
+
+    kubectl apply -f aws-auth-cm.yaml
 }
 
 main() {
