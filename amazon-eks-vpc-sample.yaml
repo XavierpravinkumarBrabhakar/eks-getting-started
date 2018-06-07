@@ -99,7 +99,7 @@ Resources:
     Properties:
       AvailabilityZone:
         Fn::Select:
-        - '1'
+        - '3'
         - Fn::GetAZs:
             Ref: AWS::Region
       CidrBlock:
