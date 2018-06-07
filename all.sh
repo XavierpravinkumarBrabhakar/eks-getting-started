@@ -40,7 +40,7 @@ createVPC() {
 installAwsEksCli() {
     curl -LO https://s3-us-west-2.amazonaws.com/amazon-eks/1.10.3/2018-06-05/eks-2017-11-01.normal.json
     mkdir -p $HOME/.aws/models/eks/2017-11-01/
-    cp eks-2017-11-01.normal.json $HOME/.aws/models/eks/2017-11-01/
+    mv eks-2017-11-01.normal.json $HOME/.aws/models/eks/2017-11-01/
     aws configure add-model  --service-name eks --service-model file://$HOME/.aws/models/eks/2017-11-01/eks-2017-11-01.normal.json
 }
 
