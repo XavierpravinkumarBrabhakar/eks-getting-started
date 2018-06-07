@@ -93,8 +93,10 @@ EOF
 
 createWorkers() {
 
-    aws ec2 create-key-pair --key-name ${WORKER_STACK_NAME} --query 'KeyMaterial' --output text > $HOME/.ssh/id-eks.pem
-    chmod 0400 $HOME/.ssh/id-eks.pem
+    if ! aws ec2 describe-key-pairs --key-names  ${WORKER_STACK_NAME}; then
+      aws ec2 create-key-pair --key-name ${WORKER_STACK_NAME} --query 'KeyMaterial' --output text > $HOME/.ssh/id-eks.pem
+      chmod 0400 $HOME/.ssh/id-eks.pem
+    fi
 
     aws cloudformation create-stack \
 	--stack-name $WORKER_STACK_NAME  \
