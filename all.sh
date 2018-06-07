@@ -123,34 +123,34 @@ EOF
 
 main() {
 
-export AWS_DEFAULT_REGION=us-east-1
-export EKS_WORKER_AMI=ami-dea4d5a1
-export VPC_STACK_NAME=eks-service-vpc
-export WORKER_STACK_NAME=eks-service-worker-nodes
-export EKS_CLUSTER_NAME=eks-devel
-export EKS_SERVICE_ROLE_NAME=eksServiceRole
-
-export EKS_NODE_GROUP_NAME=eks-worker-group
-export EKS_NODE_TYPE=t2.small
-export EKS_NODE_MIN=3
-export EKS_NODE_MAX=3
-
-
-if ! aws iam get-role --role-name $EKS_SERVICE_ROLE_NAME > /dev/null ; then
-    createRole
-fi
-
-EKS_SERVICE_ROLE=$(aws iam list-roles --query 'Roles[?contains(RoleName, `eksService`) ].Arn' --out text)
-
-createVPC
-
-EKS_SECURITY_GROUPS=$(getStackOutput $VPC_STACK_NAME SecurityGroups)
-EKS_VPC_ID=$(getStackOutput $VPC_STACK_NAME VpcId)
-EKS_SUBNET_IDS=$(getStackOutput $VPC_STACK_NAME SubnetIds)
-
-createCluster
-
-
-EKS_ENDPOINT=$(aws eks describe-cluster --name $EKS_CLUSTER_NAME --query cluster.endpoint)
-EKS_CERT=$(aws eks describe-cluster --name $EKS_CLUSTER_NAME --query cluster.certificateAuthority.data)
+  export AWS_DEFAULT_REGION=us-east-1
+  export EKS_WORKER_AMI=ami-dea4d5a1
+  export VPC_STACK_NAME=eks-service-vpc
+  export WORKER_STACK_NAME=eks-service-worker-nodes
+  export EKS_CLUSTER_NAME=eks-devel
+  export EKS_SERVICE_ROLE_NAME=eksServiceRole
+  
+  export EKS_NODE_GROUP_NAME=eks-worker-group
+  export EKS_NODE_TYPE=t2.small
+  export EKS_NODE_MIN=3
+  export EKS_NODE_MAX=3
+  
+  
+  if ! aws iam get-role --role-name $EKS_SERVICE_ROLE_NAME > /dev/null ; then
+      createRole
+  fi
+  
+  EKS_SERVICE_ROLE=$(aws iam list-roles --query 'Roles[?contains(RoleName, `eksService`) ].Arn' --out text)
+  
+  createVPC
+  
+  EKS_SECURITY_GROUPS=$(getStackOutput $VPC_STACK_NAME SecurityGroups)
+  EKS_VPC_ID=$(getStackOutput $VPC_STACK_NAME VpcId)
+  EKS_SUBNET_IDS=$(getStackOutput $VPC_STACK_NAME SubnetIds)
+  
+  createCluster
+  
+  EKS_ENDPOINT=$(aws eks describe-cluster --name $EKS_CLUSTER_NAME --query cluster.endpoint)
+  EKS_CERT=$(aws eks describe-cluster --name $EKS_CLUSTER_NAME --query cluster.certificateAuthority.data)
+  
 }
