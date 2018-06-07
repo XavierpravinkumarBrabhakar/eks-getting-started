@@ -144,6 +144,19 @@ waitCreateStack() {
     aws cloudformation wait stack-create-complete --stack-name $stack
 }
 
+deleteStackWait() {
+    declare stack=${1:? required stackName}
+    aws cloudformation delete-stack --stack-name $stack
+    echo "---> wait for stack delete: ${stack} ..."
+    aws cloudformation wait stack-delete-complete --stack-name $stack
+}
+
+cleanup() {
+    deleteStackWait $WORKER_STACK_NAME
+    aws eks delete-cluster --name $EKS_CLUSTER_NAME
+    deleteStackWait $VPC_STACK_NAME
+}
+
 main() {
 
   export AWS_DEFAULT_REGION=us-east-1
