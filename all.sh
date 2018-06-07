@@ -5,6 +5,8 @@ createRole() {
 	--stack-name eks-service-role \
 	--template-body file://amazon-eks-service-role.yaml \
 	--capabilities CAPABILITY_NAMED_IAM
+
+    waitCreateStack eks-service-role
 }
 
 
@@ -34,6 +36,8 @@ createVPC() {
     --stack-name ${VPC_STACK_NAME} \
     --template-body file://amazon-eks-vpc-sample.yaml \
     --region us-east-1
+
+    waitCreateStack ${VPC_STACK_NAME}
 }
 
 
@@ -100,6 +104,7 @@ createWorkers() {
 	    ParameterKey=VpcId,ParameterValue=${EKS_VPC_ID} \
 	    ParameterKey=KeyName,ParameterValue=${WORKER_STACK_NAME}
 
+    waitCreateStack ${WORKER_STACK_NAME}
 }
 
 authWorkers() {
@@ -119,6 +124,24 @@ data:
 EOF
 
     kubectl apply -f aws-auth-cm.yaml
+}
+
+waitStackState() {
+    declare desc=""
+    declare stack=${1:? required stackName} state=${2:? required stackStatePattern}
+    
+    echo "---> wait for stack delete: ${stack}"
+    while ! aws cloudformation describe-stacks --stack-name ${stack} --query  Stacks[].StackStatus --out text | grep -q "${state}"; do 
+	sleep ${SLEEP:=3}
+	echo -n .
+    done
+
+}
+
+waitCreateStack() {
+    declare stack=${1:? required stackName}
+    echo "---> wait for stack create: ${stack} ..."
+    aws cloudformation wait stack-create-complete --stack-name $stack
 }
 
 main() {
