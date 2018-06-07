@@ -153,4 +153,10 @@ main() {
   EKS_ENDPOINT=$(aws eks describe-cluster --name $EKS_CLUSTER_NAME --query cluster.endpoint)
   EKS_CERT=$(aws eks describe-cluster --name $EKS_CLUSTER_NAME --query cluster.certificateAuthority.data)
   
+  
+  createWorkers
+  
+  EKS_INSTANCE_ROLE=$(getStackOutput  $WORKER_STACK_NAME NodeInstanceRole)
+
+  authWorkers
 }
