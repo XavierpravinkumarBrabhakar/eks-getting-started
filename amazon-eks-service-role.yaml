@@ -8,6 +8,7 @@ Resources:
   AWSServiceRoleForAmazonEKS:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: eksServiceRole
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -26,6 +27,3 @@ Outputs:
   RoleArn:
     Description: The role that EKS will use to create AWS resources for Kubernetes clusters
     Value: !GetAtt AWSServiceRoleForAmazonEKS.Arn
-    Export:
-      Name: !Sub "${AWS::StackName}-RoleArn"
-
