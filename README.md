@@ -14,6 +14,28 @@ source ./all.sh
 eksCreateCluster
 ```
 
+Now your env is ready to use kubectl against eks. The **KUBECONFIG** env var is pointing to `~/.kube/config-eks` 
+
+```
+$ kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.100.0.1   <none>        443/TCP   16m
+```
+
+To wait for nodes joining:
+```
+$ kubectl get nodes --watch
+```
+
+After a couple of minutes you will see all Workers as **Ready**:
+```
+$ kubectl get no
+NAME                              STATUS    ROLES     AGE       VERSION
+ip-192-168-144-225.ec2.internal   Ready     <none>    1m        v1.10.3
+ip-192-168-227-12.ec2.internal    Ready     <none>    1m        v1.10.3
+ip-192-168-72-48.ec2.internal     Ready     <none>    1m        v1.10.3
+```
+
 ## Configuration
 
 You can change all paramters, most notably: instanceType, min and max worker numbers:
